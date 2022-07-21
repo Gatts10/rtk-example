@@ -25,7 +25,6 @@ export default function EditUser() {
 
   useEffect(() => {
     dispatch(fetchUserById({ id: params.id }));
-    reset(userById.users);
   }, []);
 
   useEffect(() => {
@@ -56,77 +55,96 @@ export default function EditUser() {
         <div>Error: {userById.error}</div>
       ) : null}
       {!userById.loading && !userById.error ? (
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Name</Form.Label>
-          <Controller
-            control={control}
-            name="name"
-            defaultValue=""
-            rules={{
-              required: "The name is required",
-              pattern: {
-                value: /^[A-Za-z\s\D]+$/i,
-                message: "The name can only have letters",
-              },
-            }}
-            render={({ field }) => (
-              <Form.Control {...field} type="text" placeholder="Enter name" />
-            )}
-          />
-          <ErrorMessage errors={errors} name="name" as="p" className="error" />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Email address</Form.Label>
-          <Controller
-            control={control}
-            name="email"
-            defaultValue=""
-            rules={{
-              required: "The Email is required",
-              pattern: {
-                value:
-                  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                message: "Does not contain a valid Email address",
-              },
-            }}
-            render={({ field }) => (
-              <Form.Control {...field} type="email" placeholder="Enter email" />
-            )}
-          />
-          <ErrorMessage errors={errors} name="email" as="p" className="error" />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Phone</Form.Label>
-          <Controller
-            control={control}
-            name="phone"
-            defaultValue=""
-            rules={{
-              required: "The phone is required",
-              minLength: {
-                value: 9,
-                message: "The Phone cannot have less than 9 numbers",
-              },
-              maxLength: {
-                value: 9,
-                message: "The Phone cannot have more than 9 numbers",
-              },
-            }}
-            render={({ field }) => (
-              <Form.Control
-                {...field}
-                type="number"
-                placeholder="Enter phone"
-              />
-            )}
-          />
-          <ErrorMessage errors={errors} name="phone" as="p" className="error" />
-        </Form.Group>
-        <Button variant="primary" type="submit">
-          Edit
-        </Button>
-      </Form>
+        <Form onSubmit={handleSubmit(onSubmit)}>
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Label>Name</Form.Label>
+            <Controller
+              control={control}
+              name="name"
+              defaultValue=""
+              rules={{
+                required: "The name is required",
+                pattern: {
+                  value: /^[A-Za-z\s\D]+$/i,
+                  message: "The name can only have letters",
+                },
+              }}
+              render={({ field }) => (
+                <Form.Control {...field} type="text" placeholder="Enter name" />
+              )}
+            />
+            <ErrorMessage
+              errors={errors}
+              name="name"
+              as="p"
+              className="error"
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Label>Email address</Form.Label>
+            <Controller
+              control={control}
+              name="email"
+              defaultValue=""
+              rules={{
+                required: "The Email is required",
+                pattern: {
+                  value:
+                    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                  message: "Does not contain a valid Email address",
+                },
+              }}
+              render={({ field }) => (
+                <Form.Control
+                  {...field}
+                  type="email"
+                  placeholder="Enter email"
+                />
+              )}
+            />
+            <ErrorMessage
+              errors={errors}
+              name="email"
+              as="p"
+              className="error"
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Label>Phone</Form.Label>
+            <Controller
+              control={control}
+              name="phone"
+              defaultValue=""
+              rules={{
+                required: "The phone is required",
+                minLength: {
+                  value: 9,
+                  message: "The Phone cannot have less than 9 numbers",
+                },
+                maxLength: {
+                  value: 9,
+                  message: "The Phone cannot have more than 9 numbers",
+                },
+              }}
+              render={({ field }) => (
+                <Form.Control
+                  {...field}
+                  type="number"
+                  placeholder="Enter phone"
+                />
+              )}
+            />
+            <ErrorMessage
+              errors={errors}
+              name="phone"
+              as="p"
+              className="error"
+            />
+          </Form.Group>
+          <Button variant="primary" type="submit">
+            Edit
+          </Button>
+        </Form>
       ) : null}
     </>
   );
