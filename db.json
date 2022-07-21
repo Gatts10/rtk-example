@@ -29,6 +29,24 @@
       "name": "Chelsey Dietrich",
       "email": "Lucio_Hettinger@annie.ca",
       "phone": "(254)954-1289"
+    },
+    {
+      "name": "Orlando Carvalho",
+      "email": "orlando@mail.com",
+      "phone": "916282913",
+      "id": 6
+    },
+    {
+      "name": "João Carvalho",
+      "email": "joao@mail.com",
+      "phone": "916714324",
+      "id": 7
+    },
+    {
+      "name": "Pierre Matos",
+      "email": "pierre@mail.com",
+      "phone": "919524738",
+      "id": 8
     }
   ]
 }
