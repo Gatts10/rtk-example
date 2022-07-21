@@ -1,23 +1,40 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchUserById } from "../features/users/userSlice";
 
-export default function AddUser() {
+export default function EditUser() {
+  const params = useParams();
   const navigate = useNavigate();
 
+  const userById = useSelector((state) => state.user);
+
+  const dispatch = useDispatch();
+
   const {
-    register,
+    reset,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
+  useEffect(() => {
+    dispatch(fetchUserById({ id: params.id }));
+    reset(userById.users);
+  }, []);
+
+  useEffect(() => {
+    reset(userById.users);
+  }, [userById.users]);
+
   const onSubmit = (data) => {
     axios
-      .post("http://localhost:3000/users", data)
+      .patch(`http://localhost:3000/users/${params.id}`, data)
       .then((res) => {
         console.log(res.data);
         navigate("/users");
@@ -32,45 +49,60 @@ export default function AddUser() {
   return (
     <>
       <div className="pt-5 pb-5">
-        <h2>Add User</h2>
+        <h2>Edit User</h2>
       </div>
+      {userById.loading && <div>Loading...</div>}
+      {!userById.loading && userById.error ? (
+        <div>Error: {userById.error}</div>
+      ) : null}
+      {!userById.loading && !userById.error ? (
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Name</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter name"
-            {...register("name", {
+          <Controller
+            control={control}
+            name="name"
+            defaultValue=""
+            rules={{
               required: "The name is required",
               pattern: {
                 value: /^[A-Za-z\s\D]+$/i,
+                message: "The name can only have letters",
               },
-            })}
+            }}
+            render={({ field }) => (
+              <Form.Control {...field} type="text" placeholder="Enter name" />
+            )}
           />
           <ErrorMessage errors={errors} name="name" as="p" className="error" />
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>
-          <Form.Control
-            type="email"
-            placeholder="Enter email"
-            {...register("email", {
+          <Controller
+            control={control}
+            name="email"
+            defaultValue=""
+            rules={{
               required: "The Email is required",
               pattern: {
                 value:
                   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
                 message: "Does not contain a valid Email address",
               },
-            })}
+            }}
+            render={({ field }) => (
+              <Form.Control {...field} type="email" placeholder="Enter email" />
+            )}
           />
           <ErrorMessage errors={errors} name="email" as="p" className="error" />
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Phone</Form.Label>
-          <Form.Control
-            type="number"
-            placeholder="Enter phone"
-            {...register("phone", {
+          <Controller
+            control={control}
+            name="phone"
+            defaultValue=""
+            rules={{
               required: "The phone is required",
               minLength: {
                 value: 9,
@@ -80,14 +112,22 @@ export default function AddUser() {
                 value: 9,
                 message: "The Phone cannot have more than 9 numbers",
               },
-            })}
+            }}
+            render={({ field }) => (
+              <Form.Control
+                {...field}
+                type="number"
+                placeholder="Enter phone"
+              />
+            )}
           />
           <ErrorMessage errors={errors} name="phone" as="p" className="error" />
         </Form.Group>
         <Button variant="primary" type="submit">
-          Save
+          Edit
         </Button>
       </Form>
+      ) : null}
     </>
   );
 }

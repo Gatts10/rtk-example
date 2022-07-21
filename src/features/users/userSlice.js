@@ -14,6 +14,15 @@ export const fetchUsers = createAsyncThunk("user/fetchUsers", () => {
     .then((response) => response.data);
 });
 
+export const fetchUserById = createAsyncThunk(
+  "user/fetchUserById",
+  ({ id }) => {
+    return axios
+      .get(`http://localhost:3000/users/${id}`)
+      .then((response) => response.data);
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -27,6 +36,19 @@ const userSlice = createSlice({
       state.error = "";
     });
     builder.addCase(fetchUsers.rejected, (state, action) => {
+      state.loading = false;
+      state.users = [];
+      state.error = action.error.message;
+    });
+    builder.addCase(fetchUserById.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchUserById.fulfilled, (state, action) => {
+      state.loading = false;
+      state.users = action.payload;
+      state.error = "";
+    });
+    builder.addCase(fetchUserById.rejected, (state, action) => {
       state.loading = false;
       state.users = [];
       state.error = action.error.message;
